@@ -1,11 +1,7 @@
 ---
 // "Quick Wins" / Fast-Track Services band — mirrors Figma's pre-services row.
-const wins = [
-  { icon: "⚡", title: "LinkedIn Profile Tune-up",  body: "Headline, summary, and SEO keyword pass that turns your profile into a lead magnet." },
-  { icon: "🔎", title: "SEO Content Audit",         body: "Full content inventory, keyword gaps, and a prioritised quick-wins checklist." },
-  { icon: "🎬", title: "Instagram Reel Strategy",    body: "10 ready-to-shoot reel concepts with trending audio and viral-tested hooks." },
-  { icon: "📧", title: "Email Campaign Setup",       body: "High-converting templates, subject-line variations, and automation for your next launch." },
-];
+import { getQuickWins } from "../lib/queries";
+const wins = await getQuickWins();
 ---
 <section class="section">
   <div class="container-page">

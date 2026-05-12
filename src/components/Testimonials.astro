@@ -1,9 +1,6 @@
 ---
-const quotes = [
-  { quote: "PaiBots untangled six months of ad spend in two weeks. We're now ROAS-positive and actually understand why.", name: "Aanya Mehra",  role: "Founder, Bloom Skincare",       from: "#60A5FA", to: "#A855F7" },
-  { quote: "The team treats our money like their own. They've turned down upsells when something simpler would work. Rare.", name: "Rohan Kapoor",  role: "Director, Northbound Travels", from: "#EC4899", to: "#F43F5E" },
-  { quote: "Our showroom footfall doubled in the first quarter. The Google Business work alone paid for the entire engagement.", name: "Vikram Singh", role: "Owner, V S Motors Moradabad",  from: "#10B981", to: "#06B6D4" },
-];
+import { getTestimonials } from "../lib/queries";
+const quotes = await getTestimonials();
 ---
 <section id="testimonials" class="section">
   <div class="container-page">
@@ -21,7 +18,7 @@ const quotes = [
             <p class="text-white text-base leading-relaxed font-medium">"{q.quote}"</p>
             <div class="mt-7 pt-6 border-t border-white/10 flex items-center gap-3">
               <div class="w-10 h-10 rounded-full grid place-items-center text-white font-bold shrink-0"
-                   style={"background:linear-gradient(135deg," + q.from + " 0%," + q.to + " 100%);"}>{q.name[0]}</div>
+                   style={"background:linear-gradient(135deg," + q.fromCss + " 0%," + q.toCss + " 100%);"}>{q.name[0]}</div>
               <div>
                 <div class="text-sm font-semibold text-white">{q.name}</div>
                 <div class="text-xs text-white/55">{q.role}</div>

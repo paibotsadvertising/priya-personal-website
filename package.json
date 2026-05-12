@@ -9,7 +9,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "studio:dev": "npm --prefix sanity run dev",
+    "studio:build": "npm --prefix sanity run build",
+    "studio:deploy": "npm --prefix sanity run deploy",
+    "studio:seed": "npm --prefix sanity run seed"
   },
   "dependencies": {
     "@sanity/client": "^7.22.0",

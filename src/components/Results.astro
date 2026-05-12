@@ -1,9 +1,6 @@
 ---
-const wins = [
-  { tag: "D2C Skincare",  metric: "+312%",      metricLabel: "revenue in 6 months",     body: "Rebuilt the funnel from cold ad to checkout. Doubled AOV with bundle pages and email flows.", from: "#60A5FA", to: "#A855F7", count: { to: 312, prefix: "+", suffix: "%" } },
-  { tag: "Local Service", metric: "₹14L → ₹68L",metricLabel: "monthly bookings",        body: "Local SEO + Google Ads combo dominated 8 service-area searches. Now booked 5 weeks out.",     from: "#EC4899", to: "#F43F5E", count: null },
-  { tag: "B2B SaaS",      metric: "62",         metricLabel: "qualified demos / month", body: "LinkedIn ads + comparison-page SEO. Cost per demo dropped 4× vs. their old agency.",         from: "#10B981", to: "#06B6D4", count: { to: 62, prefix: "", suffix: "" } },
-];
+import { getResults } from "../lib/queries";
+const wins = await getResults();
 ---
 <section id="results" class="section">
   <div class="container-page">
@@ -22,13 +19,13 @@ const wins = [
           <span class="badge text-xs">{w.tag}</span>
           {w.count ? (
             <div class="mt-6 text-5xl font-extrabold tracking-[-0.04em]"
-                 style={"background:linear-gradient(90deg," + w.from + "," + w.to + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}
+                 style={"background:linear-gradient(90deg," + w.fromCss + "," + w.toCss + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}
                  data-count-to={w.count.to}
                  data-count-prefix={w.count.prefix}
                  data-count-suffix={w.count.suffix}>{w.count.prefix}0{w.count.suffix}</div>
           ) : (
             <div class="mt-6 text-5xl font-extrabold tracking-[-0.04em]"
-                 style={"background:linear-gradient(90deg," + w.from + "," + w.to + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}>{w.metric}</div>
+                 style={"background:linear-gradient(90deg," + w.fromCss + "," + w.toCss + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}>{w.metric}</div>
           )}
           <div class="text-sm text-white/55 mt-1.5">{w.metricLabel}</div>
           <p class="mt-6 text-sm text-white/70 leading-relaxed">{w.body}</p>

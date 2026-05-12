@@ -1,5 +1,6 @@
 ---
-import { SERVICES } from "../lib/site";
+import { getServices } from "../lib/queries";
+const SERVICES = await getServices();
 ---
 <section id="services" class="section relative">
   <div class="container-page">

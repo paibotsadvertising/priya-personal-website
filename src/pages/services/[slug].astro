@@ -1,13 +1,15 @@
 ---
 import Base from "../../layouts/Base.astro";
 import CTASection from "../../components/CTASection.astro";
-import { SERVICES, SITE } from "../../lib/site";
+import { getServices, getSiteSettings } from "../../lib/queries";
 
-export function getStaticPaths() {
-  return SERVICES.map(s => ({ params: { slug: s.slug }, props: { service: s } }));
+export async function getStaticPaths() {
+  const services = await getServices();
+  return services.map(s => ({ params: { slug: s.slug }, props: { service: s } }));
 }
 
 const { service } = Astro.props;
+const SITE = await getSiteSettings();
 const grad = "linear-gradient(135deg," + service.fromCss + " 0%," + service.toCss + " 100%)";
 const phoneHref = "tel:" + SITE.phoneRaw;
 ---

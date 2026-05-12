@@ -1,6 +1,8 @@
 ---
 import Logo from "./Logo.astro";
-import { SITE, SERVICES } from "../lib/site";
+import { getSiteSettings, getServices } from "../lib/queries";
+const SITE = await getSiteSettings();
+const SERVICES = await getServices();
 const phoneHref = "tel:" + SITE.phoneRaw;
 const mailHref = "mailto:" + SITE.email;
 const year = new Date().getFullYear();

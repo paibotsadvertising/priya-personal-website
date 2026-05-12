@@ -1,7 +1,8 @@
 ---
-import { SITE } from "../lib/site";
+import { getSiteSettings } from "../lib/queries";
 interface Props { defaultService?: string; eyebrow?: string; heading?: string; subheading?: string; }
 const { defaultService = "", eyebrow, heading, subheading } = Astro.props;
+const SITE = await getSiteSettings();
 const phoneHref = "tel:" + SITE.phoneRaw;
 const mailHref = "mailto:" + SITE.email + "?subject=I want to grow my business with PaiBots";
 const LEAD_API_URL = import.meta.env.PUBLIC_LEAD_API_URL || "";
