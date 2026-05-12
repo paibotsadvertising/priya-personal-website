@@ -1,0 +1,145 @@
+---
+import Base from "../../layouts/Base.astro";
+import CTASection from "../../components/CTASection.astro";
+import { SERVICES, SITE } from "../../lib/site";
+
+export function getStaticPaths() {
+  return SERVICES.map(s => ({ params: { slug: s.slug }, props: { service: s } }));
+}
+
+const { service } = Astro.props;
+const grad = "linear-gradient(135deg," + service.fromCss + " 0%," + service.toCss + " 100%)";
+const phoneHref = "tel:" + SITE.phoneRaw;
+---
+<Base title={service.title + " \u2014 " + SITE.name} description={service.blurb}>
+  <section class="relative overflow-hidden pt-24 pb-20">
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none"
+         style={"background:radial-gradient(closest-side," + service.fromCss + "44 0%, transparent 70%);filter:blur(40px);"}></div>
+    <div class="container-page relative max-w-3xl">
+      <a href="/#services" class="text-sm text-white/60 hover:text-white">&larr; All services</a>
+      <div class="grid place-items-center w-16 h-16 rounded-2xl text-3xl mt-6 mb-6"
+           style={"background:" + grad + ";box-shadow:0 16px 40px -12px " + service.fromCss + "AA;"}>
+        <span style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));">{service.icon}</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-[-0.04em]">
+        <span class="text-gradient">{service.title}</span>
+      </h1>
+      <p class="mt-5 text-lg text-white/70">{service.blurb}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#contact" class="btn btn-primary btn-lg">Get a quote &rarr;</a>
+        <a href={phoneHref} class="btn btn-ghost btn-lg">📞 {SITE.phone}</a>
+      </div>
+    </div>
+  </section>
+
+  {service.intro && service.intro.length > 0 && (
+    <section class="section pt-0">
+      <div class="container-page max-w-3xl">
+        {service.intro.map((p) => (
+          <p class="text-lg text-white/75 leading-relaxed mb-5">{p}</p>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="container-page max-w-4xl">
+      <span class="badge"><span class="badge-dot" style={"background:" + service.fromCss + ";box-shadow:0 0 10px " + service.fromCss + "AA;"}></span> What’s included</span>
+      <h2 class="mt-6 text-3xl md:text-4xl font-extrabold mb-10 text-white">Everything you need, nothing you don’t.</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        {service.features.map(f => (
+          <div class="card !p-5 flex items-start gap-3">
+            <div class="w-8 h-8 grid place-items-center rounded-lg shrink-0 text-white font-bold"
+                 style={"background:" + grad + ";"}>✓</div>
+            <div class="font-medium text-white">{f}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {service.process && service.process.length > 0 && (
+    <section class="section">
+      <div class="container-page max-w-4xl">
+        <span class="badge"><span class="badge-dot" style={"background:" + service.fromCss + ";box-shadow:0 0 10px " + service.fromCss + "AA;"}></span> How we work</span>
+        <h2 class="mt-6 text-3xl md:text-4xl font-extrabold mb-10 text-white">A clear process, no surprises.</h2>
+        <ol class="grid gap-4">
+          {service.process.map((p, i) => (
+            <li class="card !p-6 flex items-start gap-5">
+              <div class="text-3xl font-extrabold tracking-[-0.04em] shrink-0 w-12"
+                   style={"background:" + grad + ";-webkit-background-clip:text;background-clip:text;color:transparent;"}>
+                {String(i + 1).padStart(2, "0")}
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-white mb-1">{p.step}</h3>
+                <p class="text-white/65 leading-relaxed">{p.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )}
+
+  {((service.idealFor && service.idealFor.length > 0) || (service.outcomes && service.outcomes.length > 0)) && (
+    <section class="section">
+      <div class="container-page max-w-5xl grid lg:grid-cols-2 gap-6">
+        {service.idealFor && service.idealFor.length > 0 && (
+          <div class="card !p-8">
+            <span class="badge"><span class="badge-dot"></span> Who it’s for</span>
+            <h3 class="mt-5 text-2xl font-bold text-white mb-5">Ideal for</h3>
+            <ul class="space-y-3">
+              {service.idealFor.map(item => (
+                <li class="flex gap-3 text-white/75 leading-relaxed">
+                  <span class="text-emerald-400 shrink-0 mt-0.5">✓</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {service.outcomes && service.outcomes.length > 0 && (
+          <div class="card !p-8">
+            <span class="badge"><span class="badge-dot" style="background:#A855F7;box-shadow:0 0 10px #A855F7AA;"></span> What you can expect</span>
+            <h3 class="mt-5 text-2xl font-bold text-white mb-5">Outcomes</h3>
+            <ul class="space-y-3">
+              {service.outcomes.map(item => (
+                <li class="flex gap-3 text-white/75 leading-relaxed">
+                  <span class="text-purple-400 shrink-0 mt-0.5">→</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {service.faq && service.faq.length > 0 && (
+    <section class="section">
+      <div class="container-page max-w-3xl">
+        <span class="badge"><span class="badge-dot" style={"background:" + service.fromCss + ";box-shadow:0 0 10px " + service.fromCss + "AA;"}></span> FAQ</span>
+        <h2 class="mt-6 text-3xl md:text-4xl font-extrabold mb-8 text-white">Common questions</h2>
+        <div class="space-y-3">
+          {service.faq.map(item => (
+            <details class="card !p-6 group">
+              <summary class="cursor-pointer list-none flex justify-between items-center gap-4 text-white font-semibold">
+                <span>{item.q}</span>
+                <span class="text-white/40 text-xl group-open:rotate-45 transition">+</span>
+              </summary>
+              <p class="mt-4 text-white/70 leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CTASection
+    defaultService={service.title}
+    eyebrow={"Get started with " + service.shortTitle}
+    heading={"Get a quote for<br/>" + service.title}
+    subheading={"Tell us a bit about your business and we\u2019ll send a tailored proposal for " + service.shortTitle.toLowerCase() + " within 4 business hours."}
+  />
+</Base>

@@ -1,0 +1,122 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE } from "../lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = SITE.name + " — " + SITE.tagline,
+  description = SITE.description,
+  ogImage = "/images/business-card.jpeg",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, SITE.url).toString();
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#020617" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={new URL(ogImage, SITE.url).toString()} />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+</head>
+<body>
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:text-slate-900 focus:px-3 focus:py-2 focus:rounded-md focus:z-50">Skip to content</a>
+  <Header />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+  <script is:inline>
+    (() => {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const formatCount = (el) => {
+        const to = parseFloat(el.dataset.countTo || '0');
+        const decimals = parseInt(el.dataset.countDecimals || '0', 10);
+        return (el.dataset.countPrefix || '') + to.toFixed(decimals) + (el.dataset.countSuffix || '');
+      };
+
+      if (reduce) {
+        document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-in'));
+        document.querySelectorAll('[data-count-to]').forEach((el) => { el.textContent = formatCount(el); });
+        return;
+      }
+
+      const startCount = (el) => {
+        if (el.dataset.counted) return;
+        el.dataset.counted = '1';
+        const to = parseFloat(el.dataset.countTo || '0');
+        const decimals = parseInt(el.dataset.countDecimals || '0', 10);
+        const dur = parseInt(el.dataset.countDuration || '1400', 10);
+        const prefix = el.dataset.countPrefix || '';
+        const suffix = el.dataset.countSuffix || '';
+        const start = performance.now();
+        const tick = (t) => {
+          const p = Math.min(1, (t - start) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = prefix + (to * eased).toFixed(decimals) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      };
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          if (e.target.classList.contains('reveal')) e.target.classList.add('is-in');
+          if (e.target.dataset.countTo) startCount(e.target);
+          io.unobserve(e.target);
+        });
+      }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal, [data-count-to]').forEach((el) => io.observe(el));
+
+      // Mouse-tracked tilt
+      const max = 7;
+      document.querySelectorAll('.tilt').forEach((el) => {
+        let raf = 0;
+        el.addEventListener('mousemove', (ev) => {
+          const r = el.getBoundingClientRect();
+          const px = (ev.clientX - r.left) / r.width;
+          const py = (ev.clientY - r.top) / r.height;
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => {
+            el.style.setProperty('--rx', ((px - 0.5) * max).toFixed(2) + 'deg');
+            el.style.setProperty('--ry', ((0.5 - py) * max).toFixed(2) + 'deg');
+          });
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.setProperty('--rx', '0deg');
+          el.style.setProperty('--ry', '0deg');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

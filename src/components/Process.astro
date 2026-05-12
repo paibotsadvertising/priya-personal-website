@@ -1,0 +1,31 @@
+---
+const steps = [
+  { n: "01", title: "Discover",  body: "We dig into your numbers, ideal customer, and what's worked (or not) so far. No assumptions.", from: "#60A5FA", to: "#A855F7" },
+  { n: "02", title: "Strategise",body: "A 90-day plan with channels, budgets, and KPIs you'll actually use. You sign off before we spend a rupee.", from: "#EC4899", to: "#F43F5E" },
+  { n: "03", title: "Execute",   body: "Creative, copy, ads, pages, posts, emails — built and shipped weekly by people who care about your brand.", from: "#F59E0B", to: "#F97316" },
+  { n: "04", title: "Optimise",  body: "We watch the data daily, kill what's not working, double down on what is. Monthly reviews, no surprises.", from: "#10B981", to: "#06B6D4" },
+];
+---
+<section id="process" class="section">
+  <div class="container-page">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <span class="badge"><span class="badge-dot"></span> How We Work</span>
+      <h2 class="mt-6 text-4xl md:text-5xl font-extrabold tracking-[-0.035em] text-white">
+        Marketing that works in <span class="text-gradient-bp">4 steps</span>
+      </h2>
+      <p class="mt-5 text-lg text-white/65 leading-relaxed">
+        No black box, no jargon. A predictable rhythm that delivers month after month.
+      </p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 reveal-stagger">
+      {steps.map((s, i) => (
+        <div class="card relative reveal tilt shine-card" style={"--i:" + i}>
+          <div class="grid place-items-center w-12 h-12 rounded-xl text-white font-bold mb-5 transition-transform duration-300 group-hover:scale-110"
+               style={"background:linear-gradient(135deg," + s.from + " 0%," + s.to + " 100%);box-shadow:0 12px 28px -12px " + s.from + "AA;"}>{s.n}</div>
+          <h3 class="text-xl font-bold mb-3 text-white">{s.title}</h3>
+          <p class="text-sm text-white/65 leading-relaxed">{s.body}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

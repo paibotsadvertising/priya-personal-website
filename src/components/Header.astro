@@ -1,0 +1,37 @@
+---
+import Logo from "./Logo.astro";
+import { NAV_LINKS } from "../lib/site";
+---
+<nav class="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md bg-slate-950/70">
+  <div class="container-page flex items-center justify-between h-[84px] gap-8">
+    <Logo />
+    <ul class="hidden md:flex items-center gap-8 list-none flex-1 justify-center">
+      {NAV_LINKS.map(link => (
+        <li><a href={link.href} class="text-sm text-white/70 hover:text-white transition">{link.label}</a></li>
+      ))}
+    </ul>
+    <div class="flex items-center gap-3">
+      <a href="#contact" class="hidden sm:inline-flex btn btn-primary" style="padding:.625rem 1.25rem;font-size:14px;">Get Started</a>
+      <button id="nav-toggle" class="md:hidden p-2 text-white/80" aria-label="Toggle navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="md:hidden hidden border-t border-white/10 bg-slate-950/95 backdrop-blur-md">
+    <ul class="container-page py-4 list-none space-y-3">
+      {NAV_LINKS.map(link => (
+        <li><a href={link.href} class="block py-2 text-white/85 font-medium">{link.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</nav>
+<script>
+  const t = document.getElementById("nav-toggle");
+  const m = document.getElementById("mobile-menu");
+  t?.addEventListener("click", () => m?.classList.toggle("hidden"));
+  document.querySelectorAll("#mobile-menu a").forEach(a => a.addEventListener("click", () => m?.classList.add("hidden")));
+</script>

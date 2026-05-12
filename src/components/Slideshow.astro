@@ -1,0 +1,129 @@
+---
+const slides = [
+  { eyebrow: "SEO & Local SEO",         icon: "🔍", heading: "Get found where it matters",        body: "Rank on the first page for the searches your customers actually make — not vanity terms.",            bullets: ["Technical + on-page SEO", "Google Business Profile dominance", "Local citations & reviews"], stat: "78%", statLabel: "of local searches end in a store visit within 24h", from: "#60A5FA", to: "#A855F7" },
+  { eyebrow: "Performance Marketing",   icon: "🎯", heading: "Ads that pay for themselves",       body: "Google, Meta, and LinkedIn ads dialled in until every rupee spent returns three.",                    bullets: ["Funnel-aware creative", "Daily bid + budget tuning", "Attribution you can trust"],          stat: "3.2×", statLabel: "average ROAS in the first 90 days",                from: "#EC4899", to: "#F43F5E" },
+  { eyebrow: "Social & Content",        icon: "📱", heading: "Content that builds loyalty",       body: "Reels, posts, and email flows that turn passive followers into repeat buyers.",                       bullets: ["Reel-first content calendar", "Email + WhatsApp automation", "Trend-aware copywriting"],   stat: "5×",   statLabel: "higher engagement on optimised reels",            from: "#F59E0B", to: "#F97316" },
+  { eyebrow: "Websites & CRO",          icon: "💻", heading: "Sites that sell, not just show",    body: "Fast, conversion-tuned websites built on platforms your team can actually edit.",                     bullets: ["Page-speed first design", "A/B-tested CTAs", "Astro · Next · Shopify · WordPress"],         stat: "+47%", statLabel: "average uplift in form-fills after redesign",     from: "#10B981", to: "#06B6D4" },
+  { eyebrow: "Analytics & Reporting",   icon: "📊", heading: "Data you can actually act on",      body: "Plain-English dashboards that show what's working, what isn't, and what to do next.",                bullets: ["GA4 + server-side tracking", "Weekly insight reports", "Live Looker dashboards"],          stat: "24h",  statLabel: "refresh on every campaign you run with us",       from: "#A855F7", to: "#EC4899" },
+];
+---
+<section id="showcase" class="section relative overflow-hidden">
+  <div class="container-page">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="badge"><span class="badge-dot"></span> What We Do</span>
+      <h2 class="mt-6 text-4xl md:text-5xl font-extrabold tracking-[-0.035em] text-white">
+        Everything you need <span class="text-gradient-bp">under one roof</span>
+      </h2>
+      <p class="mt-5 text-lg text-white/65 leading-relaxed">A guided tour of the engines we use to grow brands.</p>
+    </div>
+
+    <div class="slides-wrap relative max-w-6xl mx-auto" data-slides>
+      <div class="overflow-hidden rounded-2xl">
+        <div class="slides-track flex transition-transform duration-700" style="transition-timing-function:cubic-bezier(.2,.7,.2,1);" data-track>
+          {slides.map(s => (
+            <div class="shrink-0 w-full">
+              <div class="card !p-8 md:!p-12 grid md:grid-cols-[1.4fr_1fr] gap-8 md:gap-12 items-center min-h-[440px]">
+                <div>
+                  <span class="badge text-xs"><span class="badge-dot" style={"background:" + s.from + ";box-shadow:0 0 10px " + s.from + "AA;"}></span> {s.eyebrow}</span>
+                  <h3 class="mt-5 text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] leading-[1.05] text-white">{s.heading}</h3>
+                  <p class="mt-5 text-base md:text-lg text-white/65 leading-relaxed">{s.body}</p>
+                  <ul class="mt-6 space-y-2 list-none">
+                    {s.bullets.map(b => (
+                      <li class="text-sm text-white/75 flex items-center gap-2.5">
+                        <span class="w-1.5 h-1.5 rounded-full shrink-0" style={"background:" + s.from + ";"}></span>{b}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="#contact" class="btn btn-primary btn-shine mt-8">Talk to us <span class="arrow-nudge">→</span></a>
+                </div>
+                <div class="grid place-items-center text-center">
+                  <div class="text-7xl mb-4" aria-hidden="true">{s.icon}</div>
+                  <div class="text-6xl md:text-7xl font-extrabold tracking-[-0.04em]"
+                       style={"background:linear-gradient(135deg," + s.from + "," + s.to + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}>{s.stat}</div>
+                  <div class="text-xs text-white/55 mt-3 max-w-[220px]">{s.statLabel}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button type="button" data-prev class="slide-nav absolute left-2 md:-left-5 top-1/2 -translate-y-1/2" aria-label="Previous slide">‹</button>
+      <button type="button" data-next class="slide-nav absolute right-2 md:-right-5 top-1/2 -translate-y-1/2" aria-label="Next slide">›</button>
+
+      <div class="mt-8 flex justify-center gap-2" data-dots>
+        {slides.map((_, i) => (
+          <button type="button" class="slide-dot" data-i={i} aria-label={"Go to slide " + (i + 1)}></button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .slide-nav {
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #fff;
+    font-size: 22px; line-height: 1;
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: background .2s, border-color .2s, box-shadow .2s;
+    z-index: 2;
+  }
+  .slide-nav:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.32); box-shadow: 0 8px 24px -8px rgba(0,0,0,.5); }
+  .slide-dot {
+    width: 28px; height: 6px; border-radius: 999px;
+    background: rgba(255,255,255,.18);
+    border: none; cursor: pointer; padding: 0;
+    transition: background .3s, width .3s;
+  }
+  .slide-dot[aria-current="true"] { background: linear-gradient(90deg, #60A5FA, #A855F7); width: 44px; }
+  @media (prefers-reduced-motion: reduce) {
+    .slides-track { transition: none !important; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-slides]');
+  const track = root?.querySelector<HTMLElement>('[data-track]');
+  const dots = Array.from(root?.querySelectorAll<HTMLButtonElement>('.slide-dot') ?? []);
+  const prev = root?.querySelector<HTMLButtonElement>('[data-prev]');
+  const next = root?.querySelector<HTMLButtonElement>('[data-next]');
+
+  if (root && track && dots.length) {
+    const total = dots.length;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let idx = 0;
+    let timer = 0;
+
+    const go = (i: number) => {
+      idx = (i + total) % total;
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      dots.forEach((d, j) => d.setAttribute('aria-current', j === idx ? 'true' : 'false'));
+    };
+
+    const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
+    const start = () => { if (reduce) return; stop(); timer = window.setInterval(() => go(idx + 1), 6500); };
+
+    prev?.addEventListener('click', () => { go(idx - 1); start(); });
+    next?.addEventListener('click', () => { go(idx + 1); start(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { go(i); start(); }));
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+
+    let touchX = 0;
+    root.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    root.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) { go(idx + (dx < 0 ? 1 : -1)); start(); }
+    });
+
+    go(0);
+    start();
+  }
+</script>

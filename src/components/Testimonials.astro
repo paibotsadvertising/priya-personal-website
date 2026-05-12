@@ -1,0 +1,35 @@
+---
+const quotes = [
+  { quote: "PaiBots untangled six months of ad spend in two weeks. We're now ROAS-positive and actually understand why.", name: "Aanya Mehra",  role: "Founder, Bloom Skincare",       from: "#60A5FA", to: "#A855F7" },
+  { quote: "The team treats our money like their own. They've turned down upsells when something simpler would work. Rare.", name: "Rohan Kapoor",  role: "Director, Northbound Travels", from: "#EC4899", to: "#F43F5E" },
+  { quote: "Our showroom footfall doubled in the first quarter. The Google Business work alone paid for the entire engagement.", name: "Vikram Singh", role: "Owner, V S Motors Moradabad",  from: "#10B981", to: "#06B6D4" },
+];
+---
+<section id="testimonials" class="section">
+  <div class="container-page">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <span class="badge"><span class="badge-dot" style="background:#F59E0B;box-shadow:0 0 10px rgba(245,158,11,.6);"></span> What Clients Say</span>
+      <h2 class="mt-6 text-4xl md:text-5xl font-extrabold tracking-[-0.035em] text-white">
+        Words from the brands <span class="text-gradient-bp">we've built</span>
+      </h2>
+    </div>
+    <div class="marquee-mask">
+      <div class="marquee-track">
+        {[...quotes, ...quotes].map((q, i) => (
+          <div class="card !p-8 shrink-0 w-[320px] sm:w-[360px] md:w-[400px]" aria-hidden={i >= quotes.length}>
+            <div class="flex items-center gap-1 mb-5 text-amber-400">★★★★★</div>
+            <p class="text-white text-base leading-relaxed font-medium">"{q.quote}"</p>
+            <div class="mt-7 pt-6 border-t border-white/10 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full grid place-items-center text-white font-bold shrink-0"
+                   style={"background:linear-gradient(135deg," + q.from + " 0%," + q.to + " 100%);"}>{q.name[0]}</div>
+              <div>
+                <div class="text-sm font-semibold text-white">{q.name}</div>
+                <div class="text-xs text-white/55">{q.role}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+---
+// "Quick Wins" / Fast-Track Services band — mirrors Figma's pre-services row.
+const wins = [
+  { icon: "⚡", title: "LinkedIn Profile Tune-up",  body: "Headline, summary, and SEO keyword pass that turns your profile into a lead magnet." },
+  { icon: "🔎", title: "SEO Content Audit",         body: "Full content inventory, keyword gaps, and a prioritised quick-wins checklist." },
+  { icon: "🎬", title: "Instagram Reel Strategy",    body: "10 ready-to-shoot reel concepts with trending audio and viral-tested hooks." },
+  { icon: "📧", title: "Email Campaign Setup",       body: "High-converting templates, subject-line variations, and automation for your next launch." },
+];
+---
+<section class="section">
+  <div class="container-page">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <span class="badge"><span class="badge-dot" style="background:#F59E0B;box-shadow:0 0 10px rgba(245,158,11,.6);"></span> Quick Wins</span>
+      <h2 class="mt-6 text-4xl md:text-5xl font-extrabold tracking-[-0.035em] text-white">
+        Fast-Track <span class="text-gradient-bp">Services</span>
+      </h2>
+      <p class="mt-5 text-lg text-white/65 leading-relaxed">
+        Get immediate results with our short-term, high-impact engagements.
+      </p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 reveal-stagger">
+      {wins.map((w, i) => (
+        <div class="card text-left reveal tilt shine-card" style={"--i:" + i}>
+          <div class="text-3xl mb-4">{w.icon}</div>
+          <h3 class="text-lg font-bold mb-2 text-white">{w.title}</h3>
+          <p class="text-sm text-white/65 leading-relaxed">{w.body}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

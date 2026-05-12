@@ -1,0 +1,47 @@
+---
+import { SERVICES } from "../lib/site";
+---
+<section id="services" class="section relative">
+  <div class="container-page">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <span class="badge"><span class="badge-dot"></span> Full-Service Solutions</span>
+      <h2 class="mt-6 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.035em]">
+        <span class="text-gradient">Complete Digital Marketing</span>
+      </h2>
+      <p class="mt-6 text-lg text-white/65 leading-relaxed">
+        End-to-end solutions to transform your digital presence and accelerate growth.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 reveal-stagger">
+      {SERVICES.map((s, i) => {
+        const grad = "linear-gradient(135deg," + s.fromCss + " 0%," + s.toCss + " 100%)";
+        const href = "/services/" + s.slug + "/";
+        return (
+          <a href={href} class="card group block relative overflow-hidden reveal tilt shine-card" style={"--i:" + i}>
+            <div class="absolute -inset-px rounded-[inherit] opacity-0 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none"
+                 style={"background:" + grad + ";filter:blur(28px);"}></div>
+            <div class="relative">
+              <div class="grid place-items-center w-14 h-14 rounded-xl text-2xl mb-5 transition-transform group-hover:scale-110"
+                   style={"background:" + grad + ";box-shadow:0 12px 28px -12px " + s.fromCss + "AA;"}>
+                <span style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));">{s.icon}</span>
+              </div>
+              <h3 class="text-lg font-bold mb-2.5 text-white">{s.title}</h3>
+              <p class="text-sm text-white/65 leading-relaxed mb-5">{s.blurb}</p>
+              <ul class="space-y-1.5 mb-5 list-none">
+                {s.features.slice(0,3).map(f => (
+                  <li class="text-xs text-white/55 flex items-center gap-2">
+                    <span class="w-1 h-1 rounded-full" style={"background:" + s.fromCss + ";"}></span>{f}
+                  </li>
+                ))}
+              </ul>
+              <div class="text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-1.5 text-white/80">
+                Learn more <span class="transition-transform group-hover:translate-x-0.5">→</span>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>

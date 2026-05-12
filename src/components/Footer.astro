@@ -1,0 +1,72 @@
+---
+import Logo from "./Logo.astro";
+import { SITE, SERVICES } from "../lib/site";
+const phoneHref = "tel:" + SITE.phoneRaw;
+const mailHref = "mailto:" + SITE.email;
+const year = new Date().getFullYear();
+---
+<footer class="border-t border-white/10 pt-20 pb-8 bg-slate-950/60">
+  <div class="container-page">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+      <div>
+        <div class="mb-4"><Logo variant="light" /></div>
+        <p class="text-sm text-white/65 leading-relaxed mb-4">{SITE.description}</p>
+        <div class="flex gap-2">
+          <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-10 h-10 grid place-items-center rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-pink-500 hover:text-white hover:border-transparent transition">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.16c3.2 0 3.58.012 4.85.07 1.17.054 1.8.249 2.23.413.56.218.96.477 1.38.896.42.42.68.819.9 1.381.16.42.36 1.057.41 2.227.06 1.266.07 1.646.07 4.85s-.01 3.585-.07 4.85c-.06 1.17-.25 1.805-.42 2.227-.22.562-.48.96-.9 1.382-.42.419-.82.679-1.38.896-.42.164-1.06.36-2.23.413-1.27.057-1.65.07-4.85.07s-3.59-.013-4.86-.07c-1.17-.06-1.81-.25-2.23-.42-.57-.22-.96-.48-1.38-.9-.42-.42-.69-.82-.9-1.38-.17-.42-.36-1.06-.42-2.23-.04-1.26-.06-1.65-.06-4.84s.02-3.59.06-4.86c.06-1.17.26-1.81.42-2.23.21-.57.48-.96.9-1.38.42-.42.81-.69 1.38-.9.42-.16 1.05-.36 2.22-.42 1.27-.05 1.65-.06 4.86-.06zm0-2.16C8.74 0 8.33.015 7.05.072 5.78.13 4.91.333 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.69.94 3.36.63 4.14.33 4.91.13 5.78.07 7.05.02 8.33 0 8.74 0 12s.02 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.67 1.34 1.08 2.13 1.38.77.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56.79-.3 1.46-.72 2.13-1.38.67-.67 1.08-1.34 1.38-2.13.3-.77.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63 19.1.33 18.23.13 16.95.07 15.67.02 15.26 0 12 0zm0 5.84c-3.4 0-6.16 2.76-6.16 6.16 0 3.41 2.76 6.17 6.16 6.17 3.41 0 6.16-2.76 6.16-6.17 0-3.4-2.76-6.16-6.16-6.16zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.85-10.41c0 .8-.65 1.44-1.44 1.44s-1.44-.65-1.44-1.44.65-1.44 1.44-1.44 1.44.65 1.44 1.44z"/>
+            </svg>
+          </a>
+          <a href={SITE.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-blue-600 hover:text-white hover:border-transparent transition">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+              <path d="M9.1 23.69v-7.98H6.63v-3.67H9.1v-1.58c0-4.08 1.85-5.98 5.86-5.98.4 0 .96.04 1.47.1.42.05.83.13 1.14.2v3.32a8.6 8.6 0 0 0-.65-.04l-.74-.01c-.7 0-1.26.1-1.67.31a1.69 1.69 0 0 0-.68.62c-.26.42-.37 1-.37 1.75v1.3h3.92l-.39 2.1-.29 1.57h-3.24v8.24C19.4 23.24 24 18.18 24 12.04 24 5.42 18.63.04 12 .04S0 5.42 0 12.04c0 5.63 3.87 10.35 9.1 11.65z"/>
+            </svg>
+          </a>
+          <a href={SITE.social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-10 h-10 grid place-items-center rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-blue-600 hover:text-white hover:border-transparent transition">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+              <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0h.01z"/>
+            </svg>
+          </a>
+          <a href={SITE.social.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-10 h-10 grid place-items-center rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-rose-500 hover:text-white hover:border-transparent transition">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+              <path d="M23.5 6.19a3.02 3.02 0 0 0-2.13-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.13-2.14c.5-1.88.5-5.81.5-5.81s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-white text-sm font-semibold uppercase tracking-wider mb-5">Services</h4>
+        <ul class="space-y-2.5 list-none">
+          {SERVICES.slice(0,5).map(s => (
+            <li><a href={"/services/" + s.slug + "/"} class="text-sm text-white/65 hover:text-white transition">{s.title}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white text-sm font-semibold uppercase tracking-wider mb-5">Company</h4>
+        <ul class="space-y-2.5 list-none">
+          <li><a href="/" class="text-sm text-white/65 hover:text-white">Home</a></li>
+          <li><a href="#services" class="text-sm text-white/65 hover:text-white">Services</a></li>
+          <li><a href="#process" class="text-sm text-white/65 hover:text-white">Process</a></li>
+          <li><a href="#contact" class="text-sm text-white/65 hover:text-white">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white text-sm font-semibold uppercase tracking-wider mb-5">Get in touch</h4>
+        <ul class="space-y-3 list-none text-sm text-white/65">
+          <li><a href={phoneHref} class="hover:text-white">📞 {SITE.phone}</a></li>
+          <li><a href={mailHref} class="hover:text-white">✉️ {SITE.email}</a></li>
+          <li><a href={SITE.whatsapp} class="hover:text-white">💬 WhatsApp</a></li>
+          <li class="pt-2 leading-relaxed">📍 {SITE.address.line1}<br/>{SITE.address.line2}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+      <p class="text-sm text-white/45">&copy; {year} {SITE.name}. All rights reserved.</p>
+      <div class="flex gap-5 text-sm text-white/45">
+        <a href="/privacy" class="hover:text-white">Privacy</a>
+        <a href="/terms" class="hover:text-white">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>

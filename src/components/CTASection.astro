@@ -1,0 +1,151 @@
+---
+import { SITE } from "../lib/site";
+interface Props { defaultService?: string; eyebrow?: string; heading?: string; subheading?: string; }
+const { defaultService = "", eyebrow, heading, subheading } = Astro.props;
+const phoneHref = "tel:" + SITE.phoneRaw;
+const mailHref = "mailto:" + SITE.email + "?subject=I want to grow my business with PaiBots";
+const LEAD_API_URL = import.meta.env.PUBLIC_LEAD_API_URL || "";
+---
+<section id="contact" class="relative section overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none"
+       style="background:radial-gradient(ellipse 70% 60% at 80% 20%, rgba(99,102,241,.22) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 10% 90%, rgba(168,85,247,.16) 0%, transparent 60%);"></div>
+
+  <div class="container-page relative grid lg:grid-cols-[1fr_1fr] gap-14 items-center">
+    <div>
+      <span class="badge"><span class="badge-dot"></span> {eyebrow || "Let's Start Growing"}</span>
+      {heading ? (
+        <h2 class="mt-6 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.04em]">
+          <span class="text-gradient" set:html={heading}></span>
+        </h2>
+      ) : (
+        <h2 class="mt-6 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.04em]">
+          <span class="text-gradient">Ready to elevate</span><br/>
+          <span class="text-gradient-bp">your digital presence?</span>
+        </h2>
+      )}
+      <p class="mt-6 text-white/65 text-lg max-w-md leading-relaxed">
+        {subheading || "Book a free 30-minute strategy call. We'll audit your current marketing and tell you exactly what to fix first — even if you never hire us."}
+      </p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href={mailHref} class="btn btn-primary btn-lg">Get in Touch <span aria-hidden="true">→</span></a>
+        <a href={SITE.whatsapp} class="btn btn-soft btn-lg">💬 WhatsApp</a>
+        <a href={phoneHref} class="btn btn-ghost btn-lg">📞 {SITE.phone}</a>
+      </div>
+      <p class="mt-7 text-sm text-white/45">No credit card required · We reply within 4 business hours</p>
+    </div>
+
+    <div class="card !p-8 md:!p-10">
+      <h3 class="text-2xl font-bold mb-1 text-white">Tell us about your project</h3>
+      <p class="text-sm text-white/55 mb-7">We'll get back within 4 business hours.</p>
+      <form id="lead-form" class="space-y-4" data-api-url={LEAD_API_URL} novalidate>
+        <div>
+          <label class="block text-xs font-semibold mb-1.5 uppercase tracking-wider text-white/65">Your name *</label>
+          <input name="name" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 outline-none transition" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1.5 uppercase tracking-wider text-white/65">Phone *</label>
+            <input name="phone" type="tel" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1.5 uppercase tracking-wider text-white/65">Email</label>
+            <input name="email" type="email" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 outline-none transition" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1.5 uppercase tracking-wider text-white/65">What do you need help with?</label>
+          <select name="service" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 outline-none transition">
+            <option value="" class="bg-slate-900" selected={defaultService === ""}>Pick a service</option>
+            {[
+              "Website Design & Development",
+              "Lead Generation Campaigns",
+              "Social Media Marketing",
+              "Website SEO",
+              "Local SEO",
+              "Performance Marketing",
+              "E-Commerce Marketing",
+              "Holistic Digital Marketing",
+              "Not sure yet — help me decide",
+            ].map((opt) => (
+              <option class="bg-slate-900" selected={defaultService === opt}>{opt}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1.5 uppercase tracking-wider text-white/65">A bit about your business</label>
+          <textarea name="message" rows="3" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 outline-none transition"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-full !py-3.5">Send enquiry →</button>
+        <p id="form-status" class="text-sm hidden"></p>
+      </form>
+    </div>
+  </div>
+</section>
+<script>
+  const form = document.getElementById("lead-form") as HTMLFormElement | null;
+  const status = document.getElementById("form-status");
+  const submitBtn = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+  const apiUrl = form?.dataset.apiUrl || "";
+
+  const setStatus = (text: string, color: string) => {
+    if (!status) return;
+    status.classList.remove("hidden");
+    status.textContent = text;
+    status.style.color = color;
+  };
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form) return;
+
+    const data = new FormData(form);
+    const payload = {
+      name:    String(data.get("name")    || "").trim(),
+      phone:   String(data.get("phone")   || "").trim(),
+      email:   String(data.get("email")   || "").trim(),
+      service: String(data.get("service") || "").trim(),
+      message: String(data.get("message") || "").trim(),
+      pageUrl: window.location.href,
+    };
+
+    if (!payload.name)  return setStatus("Please enter your name.", "#FCA5A5");
+    if (!payload.phone) return setStatus("Please enter your phone number.", "#FCA5A5");
+
+    if (!apiUrl) {
+      const subject = "New enquiry from " + payload.name;
+      const body = encodeURIComponent(
+        "Name: "    + payload.name    + "\n" +
+        "Phone: "   + payload.phone   + "\n" +
+        "Email: "   + payload.email   + "\n" +
+        "Service: " + payload.service + "\n\n" +
+        "Message:\n" + payload.message
+      );
+      window.location.href = "mailto:paibotsadvertising@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + body;
+      return;
+    }
+
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
+    setStatus("Sending your enquiry...", "#A5B4FC");
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (res.ok && result.ok) {
+        form.reset();
+        setStatus("Thanks! We'll get back to you within 4 business hours.", "#86EFAC");
+        if (submitBtn) { submitBtn.textContent = "Sent ✓"; }
+      } else {
+        const err = (result && result.error) || "Something went wrong. Please try WhatsApp or email instead.";
+        setStatus(err, "#FCA5A5");
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Send enquiry →"; }
+      }
+    } catch {
+      setStatus("Network error. Please try WhatsApp or email instead.", "#FCA5A5");
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Send enquiry →"; }
+    }
+  });
+</script>

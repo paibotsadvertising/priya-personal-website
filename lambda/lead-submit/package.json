@@ -1,0 +1,9 @@
+{
+  "name": "paibots-lead-submit",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.658.0"
+  }
+}
