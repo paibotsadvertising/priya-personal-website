@@ -36,6 +36,33 @@ export type ProcessStep = {
 
 export type QuickWin = { icon: string; title: string; body: string };
 
+export type HeroCredItem = {
+  label: string;
+  staticValue?: string;
+  count?: { to: number; decimals?: number; prefix?: string; suffix?: string } | null;
+};
+
+export type HeroStatCard = {
+  label: string;
+  staticValue?: string;
+  fromCss: string;
+  toCss: string;
+  count?: { to: number; decimals?: number; suffix?: string } | null;
+};
+
+export type HeroSection = {
+  badgeText: string;
+  headlineLine1: string;
+  rotatingWords: string[];
+  subheadline: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+  credStrip: HeroCredItem[];
+  statCards: HeroStatCard[];
+};
+
 const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
   name, shortName, tagline, description, url, email, phone, phoneRaw, whatsapp,
   address, social
@@ -66,6 +93,12 @@ const PROCESS_QUERY = `*[_type == "processStep"] | order(order asc){
 }`;
 
 const QUICK_WINS_QUERY = `*[_type == "quickWin"] | order(order asc){ icon, title, body }`;
+
+const HERO_QUERY = `*[_type == "heroSection"][0]{
+  badgeText, headlineLine1, rotatingWords, subheadline,
+  primaryCtaLabel, primaryCtaHref, secondaryCtaLabel, secondaryCtaHref,
+  credStrip, statCards
+}`;
 
 // Use Sanity result if it returned a non-empty value, otherwise fall back.
 function pick<T>(value: T | null | undefined, fallback: T): T {
@@ -138,4 +171,32 @@ export async function getProcessSteps(): Promise<ProcessStep[]> {
 export async function getQuickWins(): Promise<QuickWin[]> {
   const data = await safeFetch<QuickWin[]>(QUICK_WINS_QUERY, {}, []);
   return pick(data, QUICK_WINS_FALLBACK);
+}
+
+const HERO_FALLBACK: HeroSection = {
+  badgeText: "Premium Digital Marketing Solutions",
+  headlineLine1: "Elevate Your",
+  rotatingWords: ["Digital Presence", "Brand Story", "Ad Spend ROI", "Lead Pipeline", "Local Reach", "Conversion Rate"],
+  subheadline: "Transform your brand with cutting-edge digital marketing strategies. From quick wins to comprehensive campaigns, we deliver results that matter.",
+  primaryCtaLabel: "Get Started",
+  primaryCtaHref: "#contact",
+  secondaryCtaLabel: "View Our Work",
+  secondaryCtaHref: "#results",
+  credStrip: [
+    { label: "ad spend managed", count: { to: 4.2, decimals: 1, prefix: "₹", suffix: " Cr+" } },
+    { label: "brands grown",     count: { to: 180, decimals: 0, suffix: "+" } },
+    { label: "avg ROAS",         count: { to: 3.2, decimals: 1, suffix: "×" } },
+    { label: "monitoring",       staticValue: "24/7" },
+  ],
+  statCards: [
+    { label: "Avg. ROAS in 90 days",    fromCss: "#60A5FA", toCss: "#A855F7", count: { to: 3.2, decimals: 1, suffix: "×" } },
+    { label: "Qualified leads / mo",    fromCss: "#EC4899", toCss: "#F43F5E", count: { to: 412, decimals: 0, suffix: "" } },
+    { label: "On 28 priority keywords", fromCss: "#F59E0B", toCss: "#F97316", staticValue: "#1" },
+    { label: "Client retention",        fromCss: "#10B981", toCss: "#06B6D4", count: { to: 98, decimals: 0, suffix: "%" } },
+  ],
+};
+
+export async function getHeroSection(): Promise<HeroSection> {
+  const data = await safeFetch<HeroSection | null>(HERO_QUERY, {}, null);
+  return pick(data, HERO_FALLBACK);
 }

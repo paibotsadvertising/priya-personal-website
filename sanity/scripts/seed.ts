@@ -143,6 +143,31 @@ async function run() {
     tx.createOrReplace({ _id: "quickWin-" + slug(w.title), _type: "quickWin", ...w, order: i });
   });
 
+  tx.createOrReplace({
+    _id: "heroSection",
+    _type: "heroSection",
+    badgeText: "Premium Digital Marketing Solutions",
+    headlineLine1: "Elevate Your",
+    rotatingWords: ["Digital Presence", "Brand Story", "Ad Spend ROI", "Lead Pipeline", "Local Reach", "Conversion Rate"],
+    subheadline: "Transform your brand with cutting-edge digital marketing strategies. From quick wins to comprehensive campaigns, we deliver results that matter.",
+    primaryCtaLabel: "Get Started",
+    primaryCtaHref: "#contact",
+    secondaryCtaLabel: "View Our Work",
+    secondaryCtaHref: "#results",
+    credStrip: [
+      { _key: "cred-spend",   label: "ad spend managed", count: { to: 4.2, decimals: 1, prefix: "₹", suffix: " Cr+" } },
+      { _key: "cred-brands",  label: "brands grown",     count: { to: 180, decimals: 0, prefix: "",  suffix: "+" } },
+      { _key: "cred-roas",    label: "avg ROAS",         count: { to: 3.2, decimals: 1, prefix: "",  suffix: "×" } },
+      { _key: "cred-monitor", label: "monitoring",       staticValue: "24/7" },
+    ],
+    statCards: [
+      { _key: "stat-roas",    label: "Avg. ROAS in 90 days",    fromCss: "#60A5FA", toCss: "#A855F7", count: { to: 3.2, decimals: 1, suffix: "×" } },
+      { _key: "stat-leads",   label: "Qualified leads / mo",    fromCss: "#EC4899", toCss: "#F43F5E", count: { to: 412, decimals: 0, suffix: "" } },
+      { _key: "stat-rank",    label: "On 28 priority keywords", fromCss: "#F59E0B", toCss: "#F97316", staticValue: "#1" },
+      { _key: "stat-retain",  label: "Client retention",        fromCss: "#10B981", toCss: "#06B6D4", count: { to: 98, decimals: 0, suffix: "%" } },
+    ],
+  });
+
   const result = await tx.commit();
   const counts: Record<string, number> = {};
   for (const r of result.results) counts[r.id.split("-")[0]] = (counts[r.id.split("-")[0]] || 0) + 1;

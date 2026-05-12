@@ -1,5 +1,8 @@
 ---
 // Mirrors Figma's hero: badge → massive gradient text → dual CTAs → stats grid
+import { getHeroSection } from "../lib/queries";
+const hero = await getHeroSection();
+const initialWord = hero.rotatingWords[0] || "Digital Presence";
 ---
 <section class="relative overflow-hidden pt-28 pb-32">
   <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[700px] pointer-events-none orb-drift-1"
@@ -23,78 +26,77 @@
     <div class="fade-up flex justify-center">
       <div class="cred-strip" aria-label="Agency performance highlights">
         <span class="cred-spark" aria-hidden="true">⚡</span>
-        <span class="cred-item">
-          <span class="cred-num"><span data-count-to="4.2" data-count-decimals="1" data-count-prefix="₹" data-count-suffix=" Cr+" data-count-duration="1600">₹0 Cr+</span></span>
-          <span class="cred-label">ad spend managed</span>
-        </span>
-        <span class="cred-sep" aria-hidden="true"></span>
-        <span class="cred-item">
-          <span class="cred-num"><span data-count-to="180" data-count-decimals="0" data-count-suffix="+" data-count-duration="1600">0+</span></span>
-          <span class="cred-label">brands grown</span>
-        </span>
-        <span class="cred-sep" aria-hidden="true"></span>
-        <span class="cred-item">
-          <span class="cred-num"><span data-count-to="3.2" data-count-decimals="1" data-count-suffix="×" data-count-duration="1600">0×</span></span>
-          <span class="cred-label">avg ROAS</span>
-        </span>
-        <span class="cred-sep" aria-hidden="true"></span>
-        <span class="cred-item">
-          <span class="cred-num">24/7</span>
-          <span class="cred-label">monitoring</span>
-        </span>
+        {hero.credStrip.map((c, i) => (
+          <>
+            {i > 0 && <span class="cred-sep" aria-hidden="true"></span>}
+            <span class="cred-item">
+              <span class="cred-num">
+                {c.count ? (
+                  <span data-count-to={c.count.to}
+                        data-count-decimals={c.count.decimals ?? 0}
+                        data-count-prefix={c.count.prefix ?? ""}
+                        data-count-suffix={c.count.suffix ?? ""}
+                        data-count-duration="1600">{(c.count.prefix ?? "") + "0" + (c.count.suffix ?? "")}</span>
+                ) : (c.staticValue || "")}
+              </span>
+              <span class="cred-label">{c.label}</span>
+            </span>
+          </>
+        ))}
       </div>
     </div>
 
-    <span class="badge fade-up delay-1 mt-5"><span class="badge-dot pulse-dot"></span> Premium Digital Marketing Solutions</span>
+    <span class="badge fade-up delay-1 mt-5"><span class="badge-dot pulse-dot"></span> {hero.badgeText}</span>
 
     <h1 class="mt-8 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.02] tracking-[-0.04em] fade-up delay-2">
-      <span class="text-shimmer">Elevate Your</span><br/>
+      <span class="text-shimmer">{hero.headlineLine1}</span><br/>
       <span class="word-rotate" aria-live="polite">
-        <span class="text-gradient-bp word-rotate__item" data-rotator>Digital Presence</span><span class="caret-blink" aria-hidden="true"></span>
+        <span class="text-gradient-bp word-rotate__item" data-rotator>{initialWord}</span><span class="caret-blink" aria-hidden="true"></span>
       </span>
     </h1>
 
     <p class="mt-8 text-lg md:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed fade-up delay-3">
-      Transform your brand with cutting-edge digital marketing strategies. From quick wins to comprehensive campaigns, we deliver results that matter.
+      {hero.subheadline}
     </p>
 
     <div class="mt-10 flex flex-wrap justify-center gap-3 fade-up delay-4">
-      <a href="#contact" class="btn btn-primary btn-lg btn-shine">Get Started <span aria-hidden="true" class="arrow-nudge">→</span></a>
-      <a href="#results" class="btn btn-ghost btn-lg">View Our Work</a>
+      <a href={hero.primaryCtaHref} class="btn btn-primary btn-lg btn-shine">{hero.primaryCtaLabel} <span aria-hidden="true" class="arrow-nudge">→</span></a>
+      <a href={hero.secondaryCtaHref} class="btn btn-ghost btn-lg">{hero.secondaryCtaLabel}</a>
     </div>
 
     <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-      {[
-        { v: "3.2×", l: "Avg. ROAS in 90 days",   from: "#60A5FA", to: "#A855F7", d: "delay-4", c: { to: 3.2, dec: 1, suf: "×" } },
-        { v: "412",  l: "Qualified leads / mo",   from: "#EC4899", to: "#F43F5E", d: "delay-5", c: { to: 412, dec: 0, suf: "" } },
-        { v: "#1",   l: "On 28 priority keywords",from: "#F59E0B", to: "#F97316", d: "delay-6", c: null },
-        { v: "98%",  l: "Client retention",       from: "#10B981", to: "#06B6D4", d: "delay-7", c: { to: 98, dec: 0, suf: "%" } },
-      ].map(s => (
-        <div class={"card !p-5 text-center tilt fade-up " + s.d}>
-          {s.c ? (
-            <div class="text-3xl md:text-4xl font-extrabold tracking-tight"
-                 style={"background:linear-gradient(90deg," + s.from + "," + s.to + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}
-                 data-count-to={s.c.to}
-                 data-count-decimals={s.c.dec}
-                 data-count-suffix={s.c.suf}
-                 data-count-duration="1600">0{s.c.suf}</div>
-          ) : (
-            <div class="text-3xl md:text-4xl font-extrabold tracking-tight"
-                 style={"background:linear-gradient(90deg," + s.from + "," + s.to + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}>{s.v}</div>
-          )}
-          <div class="text-xs text-white/55 mt-2">{s.l}</div>
-        </div>
-      ))}
+      {hero.statCards.map((s, i) => {
+        const delay = "delay-" + (4 + i);
+        return (
+          <div class={"card !p-5 text-center tilt fade-up " + delay}>
+            {s.count ? (
+              <div class="text-3xl md:text-4xl font-extrabold tracking-tight"
+                   style={"background:linear-gradient(90deg," + s.fromCss + "," + s.toCss + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}
+                   data-count-to={s.count.to}
+                   data-count-decimals={s.count.decimals ?? 0}
+                   data-count-suffix={s.count.suffix ?? ""}
+                   data-count-duration="1600">{"0" + (s.count.suffix ?? "")}</div>
+            ) : (
+              <div class="text-3xl md:text-4xl font-extrabold tracking-tight"
+                   style={"background:linear-gradient(90deg," + s.fromCss + "," + s.toCss + ");-webkit-background-clip:text;background-clip:text;color:transparent;"}>{s.staticValue}</div>
+            )}
+            <div class="text-xs text-white/55 mt-2">{s.label}</div>
+          </div>
+        );
+      })}
     </div>
   </div>
 </section>
 
+<script type="application/json" id="hero-rotator-words" set:html={JSON.stringify(hero.rotatingWords)} />
+
 <script>
   const target = document.querySelector<HTMLElement>('[data-rotator]');
-  if (target) {
-    const words = ['Digital Presence', 'Brand Story', 'Ad Spend ROI', 'Lead Pipeline', 'Local Reach', 'Conversion Rate'];
+  const dataEl = document.getElementById('hero-rotator-words');
+  if (target && dataEl && dataEl.textContent) {
+    const words: string[] = JSON.parse(dataEl.textContent);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduce) {
+    if (!reduce && words.length > 1) {
       let i = 0;
       const swap = () => {
         target.classList.add('is-out');
