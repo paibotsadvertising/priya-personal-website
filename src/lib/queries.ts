@@ -36,6 +36,18 @@ export type ProcessStep = {
 
 export type QuickWin = { icon: string; title: string; body: string };
 
+export type Product = {
+  id: string;
+  title: string;
+  blurb: string;
+  features: string[];
+  price: number;
+  icon: string;
+  fromCss: string;
+  toCss: string;
+  paymentUrl: string;
+};
+
 export type HeroCredItem = {
   label: string;
   staticValue?: string;
@@ -93,6 +105,10 @@ const PROCESS_QUERY = `*[_type == "processStep"] | order(order asc){
 }`;
 
 const QUICK_WINS_QUERY = `*[_type == "quickWin"] | order(order asc){ icon, title, body }`;
+
+const PRODUCTS_QUERY = `*[_type == "product"] | order(order asc, title asc){
+  "id": coalesce(_id, title), title, blurb, features, price, icon, fromCss, toCss, paymentUrl
+}`;
 
 const HERO_QUERY = `*[_type == "heroSection"][0]{
   badgeText, headlineLine1, rotatingWords, subheadline,
@@ -171,6 +187,38 @@ export async function getProcessSteps(): Promise<ProcessStep[]> {
 export async function getQuickWins(): Promise<QuickWin[]> {
   const data = await safeFetch<QuickWin[]>(QUICK_WINS_QUERY, {}, []);
   return pick(data, QUICK_WINS_FALLBACK);
+}
+
+const PRODUCTS_FALLBACK: Product[] = [
+  {
+    id: "mini-seo-audit",
+    title: "Mini SEO Audit",
+    blurb: "One-time site audit with prioritized fixes, delivered within 5 business days.",
+    features: ["20-point technical scan", "Top 10 keyword opportunities", "Prioritized action list"],
+    price: 2000, icon: "🔍", fromCss: "#2563EB", toCss: "#9333EA",
+    paymentUrl: "https://pages.razorpay.com/paibotsadvertising",
+  },
+  {
+    id: "social-starter-pack",
+    title: "Social Media Starter Pack",
+    blurb: "10 on-brand designed posts for one platform — ready to publish.",
+    features: ["10 custom-designed creatives", "Captions + hashtags included", "1 round of revisions"],
+    price: 2000, icon: "📱", fromCss: "#EC4899", toCss: "#F43F5E",
+    paymentUrl: "https://pages.razorpay.com/paibotsadvertising",
+  },
+  {
+    id: "google-ads-setup",
+    title: "Google Ads Setup",
+    blurb: "One campaign configured end-to-end with conversion tracking.",
+    features: ["Account + campaign build", "Keyword + ad copy research", "Conversion tracking wired"],
+    price: 2000, icon: "🎯", fromCss: "#F59E0B", toCss: "#F97316",
+    paymentUrl: "https://pages.razorpay.com/paibotsadvertising",
+  },
+];
+
+export async function getProducts(): Promise<Product[]> {
+  const data = await safeFetch<Product[]>(PRODUCTS_QUERY, {}, []);
+  return pick(data, PRODUCTS_FALLBACK);
 }
 
 const HERO_FALLBACK: HeroSection = {

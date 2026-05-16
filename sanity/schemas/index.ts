@@ -6,12 +6,14 @@ import resultMetric from "./resultMetric";
 import processStep from "./processStep";
 import quickWin from "./quickWin";
 import heroSection from "./heroSection";
+import product from "./product";
 
 export const schemaTypes = [
   siteSettings,
   heroSection,
   navLink,
   service,
+  product,
   testimonial,
   resultMetric,
   processStep,

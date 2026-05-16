@@ -77,6 +77,15 @@ const QUICK_WINS = [
   { icon: "📧", title: "Email Campaign Setup",      body: "High-converting templates, subject-line variations, and automation for your next launch." },
 ];
 
+// Until per-product Razorpay Payment Pages are created, all 3 share one URL.
+// Replace paymentUrl per item in the Studio (or here + re-seed) when ready.
+const SHARED_RZP_URL = "https://pages.razorpay.com/paibotsadvertising";
+const PRODUCTS = [
+  { id: "mini-seo-audit",       title: "Mini SEO Audit",            blurb: "One-time site audit with prioritized fixes, delivered within 5 business days.", features: ["20-point technical scan", "Top 10 keyword opportunities", "Prioritized action list"], price: 2000, icon: "🔍", fromCss: "#2563EB", toCss: "#9333EA", paymentUrl: SHARED_RZP_URL },
+  { id: "social-starter-pack",  title: "Social Media Starter Pack", blurb: "10 on-brand designed posts for one platform — ready to publish.",                features: ["10 custom-designed creatives", "Captions + hashtags included", "1 round of revisions"], price: 2000, icon: "📱", fromCss: "#EC4899", toCss: "#F43F5E", paymentUrl: SHARED_RZP_URL },
+  { id: "google-ads-setup",     title: "Google Ads Setup",          blurb: "One campaign configured end-to-end with conversion tracking.",                   features: ["Account + campaign build", "Keyword + ad copy research", "Conversion tracking wired"], price: 2000, icon: "🎯", fromCss: "#F59E0B", toCss: "#F97316", paymentUrl: SHARED_RZP_URL },
+];
+
 async function run() {
   const tx = client.transaction();
 
@@ -141,6 +150,10 @@ async function run() {
 
   QUICK_WINS.forEach((w, i) => {
     tx.createOrReplace({ _id: "quickWin-" + slug(w.title), _type: "quickWin", ...w, order: i });
+  });
+
+  PRODUCTS.forEach((p, i) => {
+    tx.createOrReplace({ _id: "product-" + p.id, _type: "product", ...p, order: i });
   });
 
   tx.createOrReplace({

@@ -1,40 +1,8 @@
 ---
-// One-off digital marketing products with fixed pricing. Buy buttons link to
-// the hosted Razorpay Payment Page; no backend needed.
-const RAZORPAY_PAGE = "https://pages.razorpay.com/paibotsadvertising";
-
-const products = [
-  {
-    id: "mini-seo-audit",
-    title: "Mini SEO Audit",
-    blurb: "One-time site audit with prioritized fixes, delivered within 5 business days.",
-    features: ["20-point technical scan", "Top 10 keyword opportunities", "Prioritized action list"],
-    price: 2000,
-    icon: "🔍",
-    fromCss: "#2563EB", toCss: "#9333EA",
-    paymentUrl: RAZORPAY_PAGE,
-  },
-  {
-    id: "social-starter-pack",
-    title: "Social Media Starter Pack",
-    blurb: "10 on-brand designed posts for one platform — ready to publish.",
-    features: ["10 custom-designed creatives", "Captions + hashtags included", "1 round of revisions"],
-    price: 2000,
-    icon: "📱",
-    fromCss: "#EC4899", toCss: "#F43F5E",
-    paymentUrl: RAZORPAY_PAGE,
-  },
-  {
-    id: "google-ads-setup",
-    title: "Google Ads Setup",
-    blurb: "One campaign configured end-to-end with conversion tracking.",
-    features: ["Account + campaign build", "Keyword + ad copy research", "Conversion tracking wired"],
-    price: 2000,
-    icon: "🎯",
-    fromCss: "#F59E0B", toCss: "#F97316",
-    paymentUrl: RAZORPAY_PAGE,
-  },
-];
+// Buy-now product packages. Source: Sanity (with fallback in src/lib/queries.ts).
+// Buy buttons link to per-product hosted Razorpay Payment Page URLs.
+import { getProducts } from "../lib/queries";
+const products = await getProducts();
 const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
 ---
 <section id="products" class="section relative">
