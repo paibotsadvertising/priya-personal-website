@@ -1,0 +1,148 @@
+---
+// One-off digital marketing products with fixed pricing. Razorpay checkout
+// is wired client-side; the order is created via the existing API Lambda.
+const products = [
+  {
+    id: "mini-seo-audit",
+    title: "Mini SEO Audit",
+    blurb: "One-time site audit with prioritized fixes, delivered within 5 business days.",
+    features: ["20-point technical scan", "Top 10 keyword opportunities", "Prioritized action list"],
+    price: 2000,
+    icon: "🔍",
+    fromCss: "#2563EB", toCss: "#9333EA",
+  },
+  {
+    id: "social-starter-pack",
+    title: "Social Media Starter Pack",
+    blurb: "10 on-brand designed posts for one platform — ready to publish.",
+    features: ["10 custom-designed creatives", "Captions + hashtags included", "1 round of revisions"],
+    price: 2000,
+    icon: "📱",
+    fromCss: "#EC4899", toCss: "#F43F5E",
+  },
+  {
+    id: "google-ads-setup",
+    title: "Google Ads Setup",
+    blurb: "One campaign configured end-to-end with conversion tracking.",
+    features: ["Account + campaign build", "Keyword + ad copy research", "Conversion tracking wired"],
+    price: 2000,
+    icon: "🎯",
+    fromCss: "#F59E0B", toCss: "#F97316",
+  },
+];
+const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
+---
+<section id="products" class="section relative">
+  <div class="container-page">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <span class="badge"><span class="badge-dot" style="background:#10B981;box-shadow:0 0 10px rgba(16,185,129,.6);"></span> Buy Now</span>
+      <h2 class="mt-6 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.035em]">
+        <span class="text-gradient">Digital Marketing Products</span>
+      </h2>
+      <p class="mt-6 text-lg text-white/65 leading-relaxed">
+        Fixed-scope, fixed-price packages you can buy in a click. No proposals, no calls — just results.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {products.map(p => {
+        const grad = "linear-gradient(135deg," + p.fromCss + " 0%," + p.toCss + " 100%)";
+        return (
+          <div class="card group relative overflow-hidden flex flex-col">
+            <div class="absolute -inset-px rounded-[inherit] opacity-0 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none"
+                 style={"background:" + grad + ";filter:blur(28px);"}></div>
+            <div class="relative flex flex-col h-full">
+              <div class="grid place-items-center w-14 h-14 rounded-xl text-2xl mb-5 transition-transform group-hover:scale-110"
+                   style={"background:" + grad + ";box-shadow:0 12px 28px -12px " + p.fromCss + "AA;"}>
+                <span style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));">{p.icon}</span>
+              </div>
+              <h3 class="text-lg font-bold mb-2.5 text-white">{p.title}</h3>
+              <p class="text-sm text-white/65 leading-relaxed mb-5">{p.blurb}</p>
+              <ul class="space-y-1.5 mb-6 list-none">
+                {p.features.map(f => (
+                  <li class="text-xs text-white/55 flex items-center gap-2">
+                    <span class="w-1 h-1 rounded-full" style={"background:" + p.fromCss + ";"}></span>{f}
+                  </li>
+                ))}
+              </ul>
+              <div class="mt-auto flex items-end justify-between gap-3 pt-4 border-t border-white/10">
+                <div>
+                  <div class="text-2xl font-extrabold tracking-tight"
+                       style={"background:" + grad + ";-webkit-background-clip:text;background-clip:text;color:transparent;"}>{inr(p.price)}</div>
+                  <div class="text-[11px] uppercase tracking-wider text-white/45 mt-0.5">one-time</div>
+                </div>
+                <button type="button"
+                        class="btn btn-primary"
+                        data-buy
+                        data-product-id={p.id}
+                        data-product-name={p.title}
+                        data-product-amount={p.price}>
+                  Buy now <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <p class="mt-10 text-center text-sm text-white/45">
+      Secure payments by Razorpay · Cards, UPI, NetBanking, Wallets
+    </p>
+  </div>
+</section>
+
+<script>
+  // Razorpay client-side checkout wiring.
+  // Reads PUBLIC_RAZORPAY_KEY_ID + PUBLIC_ORDER_API_URL from build-time env.
+  const KEY_ID = import.meta.env.PUBLIC_RAZORPAY_KEY_ID as string | undefined;
+  const ORDER_API = import.meta.env.PUBLIC_ORDER_API_URL as string | undefined;
+
+  function loadScript(src: string): Promise<boolean> {
+    return new Promise(resolve => {
+      if (document.querySelector('script[src="' + src + '"]')) return resolve(true);
+      const s = document.createElement("script");
+      s.src = src; s.onload = () => resolve(true); s.onerror = () => resolve(false);
+      document.head.appendChild(s);
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("[data-buy]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.productId!;
+      const name = btn.dataset.productName!;
+      const amount = Number(btn.dataset.productAmount);
+
+      if (!KEY_ID || !ORDER_API) {
+        alert("Payments are not yet configured. Please contact us at paibotsadvertising@gmail.com to purchase.");
+        return;
+      }
+
+      btn.disabled = true; btn.textContent = "Loading…";
+      try {
+        const ok = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+        if (!ok) throw new Error("Razorpay SDK failed to load.");
+
+        const orderRes = await fetch(ORDER_API, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId: id, amount }),
+        });
+        if (!orderRes.ok) throw new Error("Could not create order.");
+        const { orderId, amount: amt, currency } = await orderRes.json();
+
+        const rzp = new (window as any).Razorpay({
+          key: KEY_ID, order_id: orderId, amount: amt, currency,
+          name: "PaiBots Advertising", description: name,
+          theme: { color: "#9333EA" },
+          handler: () => { window.location.href = "/thank-you/?p=" + encodeURIComponent(id); },
+        });
+        rzp.open();
+      } catch (err) {
+        console.error(err);
+        alert("Sorry, we could not start checkout. Please try again or contact us.");
+      } finally {
+        btn.disabled = false; btn.innerHTML = 'Buy now <span aria-hidden="true">→</span>';
+      }
+    });
+  });
+</script>

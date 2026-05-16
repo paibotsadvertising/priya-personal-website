@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../lib/site";
+const title = "Thank you — " + SITE.name;
+---
+<Base title={title} description="Your order has been received.">
+  <section class="section">
+    <div class="container-page max-w-2xl text-center">
+      <div class="grid place-items-center w-16 h-16 rounded-2xl mx-auto mb-6 text-3xl"
+           style="background:linear-gradient(135deg,#10B981 0%,#06B6D4 100%);box-shadow:0 16px 40px -12px #10B981AA;">
+        <span style="filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));">✓</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-[-0.04em]">
+        <span class="text-gradient">Payment received</span>
+      </h1>
+      <p class="mt-5 text-lg text-white/70">
+        Thanks for your purchase. We'll email you a receipt and onboarding details within one business hour.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/" class="btn btn-primary btn-lg">Back to home</a>
+        <a href="/products/" class="btn btn-ghost btn-lg">Browse more products</a>
+      </div>
+      <p class="mt-10 text-sm text-white/45">
+        Questions? Email us at <a class="underline hover:text-white" href={"mailto:" + SITE.email}>{SITE.email}</a>.
+      </p>
+    </div>
+  </section>
+</Base>
