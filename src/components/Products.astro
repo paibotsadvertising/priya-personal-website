@@ -1,6 +1,8 @@
 ---
-// One-off digital marketing products with fixed pricing. Razorpay checkout
-// is wired client-side; the order is created via the existing API Lambda.
+// One-off digital marketing products with fixed pricing. Buy buttons link to
+// the hosted Razorpay Payment Page; no backend needed.
+const RAZORPAY_PAGE = "https://pages.razorpay.com/paibotsadvertising";
+
 const products = [
   {
     id: "mini-seo-audit",
@@ -10,6 +12,7 @@ const products = [
     price: 2000,
     icon: "🔍",
     fromCss: "#2563EB", toCss: "#9333EA",
+    paymentUrl: RAZORPAY_PAGE,
   },
   {
     id: "social-starter-pack",
@@ -19,6 +22,7 @@ const products = [
     price: 2000,
     icon: "📱",
     fromCss: "#EC4899", toCss: "#F43F5E",
+    paymentUrl: RAZORPAY_PAGE,
   },
   {
     id: "google-ads-setup",
@@ -28,6 +32,7 @@ const products = [
     price: 2000,
     icon: "🎯",
     fromCss: "#F59E0B", toCss: "#F97316",
+    paymentUrl: RAZORPAY_PAGE,
   },
 ];
 const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
@@ -71,14 +76,13 @@ const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
                        style={"background:" + grad + ";-webkit-background-clip:text;background-clip:text;color:transparent;"}>{inr(p.price)}</div>
                   <div class="text-[11px] uppercase tracking-wider text-white/45 mt-0.5">one-time</div>
                 </div>
-                <button type="button"
-                        class="btn btn-primary"
-                        data-buy
-                        data-product-id={p.id}
-                        data-product-name={p.title}
-                        data-product-amount={p.price}>
+                <a href={p.paymentUrl}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-primary"
+                   aria-label={"Buy " + p.title + " for " + inr(p.price)}>
                   Buy now <span aria-hidden="true">→</span>
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -91,58 +95,3 @@ const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
     </p>
   </div>
 </section>
-
-<script>
-  // Razorpay client-side checkout wiring.
-  // Reads PUBLIC_RAZORPAY_KEY_ID + PUBLIC_ORDER_API_URL from build-time env.
-  const KEY_ID = import.meta.env.PUBLIC_RAZORPAY_KEY_ID as string | undefined;
-  const ORDER_API = import.meta.env.PUBLIC_ORDER_API_URL as string | undefined;
-
-  function loadScript(src: string): Promise<boolean> {
-    return new Promise(resolve => {
-      if (document.querySelector('script[src="' + src + '"]')) return resolve(true);
-      const s = document.createElement("script");
-      s.src = src; s.onload = () => resolve(true); s.onerror = () => resolve(false);
-      document.head.appendChild(s);
-    });
-  }
-
-  document.querySelectorAll<HTMLButtonElement>("[data-buy]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.productId!;
-      const name = btn.dataset.productName!;
-      const amount = Number(btn.dataset.productAmount);
-
-      if (!KEY_ID || !ORDER_API) {
-        alert("Payments are not yet configured. Please contact us at paibotsadvertising@gmail.com to purchase.");
-        return;
-      }
-
-      btn.disabled = true; btn.textContent = "Loading…";
-      try {
-        const ok = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-        if (!ok) throw new Error("Razorpay SDK failed to load.");
-
-        const orderRes = await fetch(ORDER_API, {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productId: id, amount }),
-        });
-        if (!orderRes.ok) throw new Error("Could not create order.");
-        const { orderId, amount: amt, currency } = await orderRes.json();
-
-        const rzp = new (window as any).Razorpay({
-          key: KEY_ID, order_id: orderId, amount: amt, currency,
-          name: "PaiBots Advertising", description: name,
-          theme: { color: "#9333EA" },
-          handler: () => { window.location.href = "/thank-you/?p=" + encodeURIComponent(id); },
-        });
-        rzp.open();
-      } catch (err) {
-        console.error(err);
-        alert("Sorry, we could not start checkout. Please try again or contact us.");
-      } finally {
-        btn.disabled = false; btn.innerHTML = 'Buy now <span aria-hidden="true">→</span>';
-      }
-    });
-  });
-</script>
