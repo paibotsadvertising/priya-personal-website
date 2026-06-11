@@ -1,7 +1,13 @@
 ---
 import Logo from "./Logo.astro";
 import { getNavLinks } from "../lib/queries";
-const NAV_LINKS = await getNavLinks();
+const rawNavLinks = await getNavLinks();
+// In-page anchors (#section) only exist on the home page. Make them root-relative
+// so they work from any page (e.g. /products/) by jumping home, then scrolling.
+const NAV_LINKS = rawNavLinks.map((link) => ({
+  ...link,
+  href: link.href.startsWith("#") ? "/" + link.href : link.href,
+}));
 ---
 <nav class="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md bg-slate-950/70">
   <div class="container-page flex items-center justify-between h-[84px] gap-8">
@@ -12,7 +18,7 @@ const NAV_LINKS = await getNavLinks();
       ))}
     </ul>
     <div class="flex items-center gap-3">
-      <a href="#contact" class="hidden sm:inline-flex btn btn-primary" style="padding:.625rem 1.25rem;font-size:14px;">Get Started</a>
+      <a href="/#contact" class="hidden sm:inline-flex btn btn-primary" style="padding:.625rem 1.25rem;font-size:14px;">Get Started</a>
       <button id="nav-toggle" class="md:hidden p-2 text-white/80" aria-label="Toggle navigation">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="3" y1="6" x2="21" y2="6"></line>

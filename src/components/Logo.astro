@@ -1,7 +1,7 @@
 ---
 interface Props { variant?: "dark" | "light"; size?: "sm" | "md" | "lg"; }
 const { size = "md" } = Astro.props;
-// Logo aspect 1326x420 ≈ 3.16:1
+// Logo aspect 682x202 ≈ 3.38:1
 const heightMap: Record<string, string> = { sm: "h-10", md: "h-14", lg: "h-20" };
 const heightClass = heightMap[size];
 ---
@@ -10,7 +10,7 @@ const heightClass = heightMap[size];
     src="/images/paibots-logo.png"
     alt="PaiBots Advertising"
     class={heightClass + " w-auto"}
-    width="1326" height="420"
+    width="682" height="202"
     decoding="async"
   />
 </a>
