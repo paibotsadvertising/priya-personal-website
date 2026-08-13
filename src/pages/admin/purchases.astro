@@ -1,0 +1,91 @@
+---
+// Private admin view of recorded purchases (Razorpay webhook -> DynamoDB).
+// Protected by the admin key (never committed); stored in localStorage after
+// first entry. Not linked from anywhere and noindexed.
+const API_URL = "https://t328b3odoa.execute-api.ap-south-1.amazonaws.com/api/admin/purchases";
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Purchases — Paibots Admin</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; background: #020617; color: #e2e8f0; font: 15px/1.5 system-ui, sans-serif; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    .sub { color: #64748b; font-size: 13px; margin-bottom: 24px; }
+    .keybox { display: flex; gap: 8px; margin-bottom: 24px; }
+    input { flex: 1; max-width: 360px; background: #0f172a; border: 1px solid #1e293b; color: #e2e8f0;
+            padding: 9px 12px; border-radius: 8px; font-size: 14px; }
+    button { background: #2563eb; color: #fff; border: 0; padding: 9px 18px; border-radius: 8px;
+             font-size: 14px; font-weight: 600; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    .msg { color: #f87171; font-size: 14px; margin-bottom: 16px; }
+    .ok { color: #34d399; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #1e293b; white-space: nowrap; }
+    th { color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    td.svc { font-weight: 600; color: #fff; }
+    .amt { font-variant-numeric: tabular-nums; }
+    .scroll { overflow-x: auto; }
+    .count { color: #64748b; font-size: 13px; margin: 0 0 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Purchases</h1>
+    <p class="sub">Service bookings recorded from Razorpay payments.</p>
+    <div class="keybox">
+      <input id="key" type="password" placeholder="Admin key" autocomplete="off" />
+      <button id="load">Load</button>
+    </div>
+    <p class="msg" id="msg"></p>
+    <p class="count" id="count"></p>
+    <div class="scroll"><table id="tbl" hidden>
+      <thead><tr>
+        <th>Date</th><th>Service</th><th>Amount</th><th>Customer</th>
+        <th>Email</th><th>Phone</th><th>Payment ID</th><th>Method</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </div>
+  <script is:inline define:vars={{ API_URL }}>
+    const $ = (id) => document.getElementById(id);
+    const fmtAmt = (n) => "₹" + Number(n || 0).toLocaleString("en-IN");
+    const fmtDate = (iso) => iso ? new Date(iso).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" }) : "";
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+    async function load() {
+      const key = $("key").value.trim();
+      if (!key) { $("msg").textContent = "Enter the admin key."; return; }
+      $("msg").textContent = "Loading…"; $("msg").className = "msg ok";
+      try {
+        const res = await fetch(API_URL, { headers: { "x-admin-key": key } });
+        if (res.status === 401) { $("msg").className = "msg"; $("msg").textContent = "Wrong admin key."; return; }
+        const data = await res.json();
+        localStorage.setItem("paibots_admin_key", key);
+        $("msg").textContent = "";
+        $("count").textContent = data.count + " purchase" + (data.count === 1 ? "" : "s");
+        const rows = data.purchases.map((p) =>
+          "<tr><td>" + fmtDate(p.createdAt) + '</td><td class="svc">' + esc(p.serviceName) +
+          '</td><td class="amt">' + fmtAmt(p.amount) + "</td><td>" + (esc(p.customerName) || "—") +
+          "</td><td>" + (esc(p.email) || "—") + "</td><td>" + (esc(p.contact) || "—") +
+          "</td><td>" + esc(p.id) + "</td><td>" + esc(p.method) + "</td></tr>"
+        ).join("");
+        $("rows").innerHTML = rows;
+        $("tbl").hidden = false;
+      } catch (e) {
+        $("msg").className = "msg"; $("msg").textContent = "Failed to load: " + e.message;
+      }
+    }
+
+    $("load").addEventListener("click", load);
+    $("key").addEventListener("keydown", (e) => { if (e.key === "Enter") load(); });
+    const saved = localStorage.getItem("paibots_admin_key");
+    if (saved) { $("key").value = saved; load(); }
+  </script>
+</body>
+</html>
