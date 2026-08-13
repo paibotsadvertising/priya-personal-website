@@ -41,13 +41,14 @@ const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
                 <div>
                   <div class="text-2xl font-extrabold tracking-tight"
                        style={"background:" + grad + ";-webkit-background-clip:text;background-clip:text;color:transparent;"}>{inr(p.price)}</div>
+                  <div class="text-[11px] text-white/55 mt-0.5">+ 18% GST · {inr(Math.round(p.price * 1.18))} total</div>
                   <div class="text-[11px] uppercase tracking-wider text-white/45 mt-0.5">one-time</div>
                 </div>
                 <a href={p.paymentUrl}
                    target="_blank"
                    rel="noopener noreferrer"
                    class="btn btn-primary"
-                   aria-label={"Buy " + p.title + " for " + inr(p.price)}>
+                   aria-label={"Buy " + p.title + " for " + inr(p.price) + " + 18% GST"}>
                   Buy now <span aria-hidden="true">→</span>
                 </a>
               </div>

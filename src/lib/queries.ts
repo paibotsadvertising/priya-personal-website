@@ -203,7 +203,7 @@ const PRODUCTS_FALLBACK: Product[] = [
     title: "Social Media Starter Pack",
     blurb: "10 on-brand designed posts for one platform — ready to publish.",
     features: ["10 custom-designed creatives", "Captions + hashtags included", "1 round of revisions"],
-    price: 2000, icon: "📱", fromCss: "#EC4899", toCss: "#F43F5E",
+    price: 5000, icon: "📱", fromCss: "#EC4899", toCss: "#F43F5E",
     paymentUrl: "https://pages.razorpay.com/paibotsadvertising",
   },
   {
@@ -211,7 +211,7 @@ const PRODUCTS_FALLBACK: Product[] = [
     title: "Google Ads Setup",
     blurb: "One campaign configured end-to-end with conversion tracking.",
     features: ["Account + campaign build", "Keyword + ad copy research", "Conversion tracking wired"],
-    price: 2000, icon: "🎯", fromCss: "#F59E0B", toCss: "#F97316",
+    price: 5000, icon: "🎯", fromCss: "#F59E0B", toCss: "#F97316",
     paymentUrl: "https://pages.razorpay.com/paibotsadvertising",
   },
 ];
